@@ -2,13 +2,10 @@ package generic;
 
 import generic.color.comparator.ColorComparator;
 import generic.color.comparator.ExplodingEuclideanColorComparator2;
-import generic.color.comparator.RGBColorComparator;
 import generic.color.grid.ColorGrid;
 import generic.color.grid.ColorGridPrinter;
 import generic.color.grid.ImageFileColorGrid;
 import generic.color.palette.ColorPalette;
-import generic.color.palette.ComparatorColorPalette;
-import generic.color.palette.GreyScaleColorPalette;
 import generic.transform.ColorGridTransform;
 import generic.transform.ColorTransform;
 import generic.transform.CompositeTransform;
@@ -21,13 +18,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.awt.Color;
 
-import lego.Brick;
 import lego.BrickGrid;
 import lego.BrickGridFactory;
 import lego.BrickGridPrinter;
-import lego.BrickUnit;
 import lego.LegoColorPalette;
-import lego.SimpleLegoColorPalette;
+import lego.transform.BrickGridSplitter;
+import lego.transform.SimpleBrickGridSplitter;
 
 public class Main {
 
@@ -36,7 +32,7 @@ public class Main {
 		String imageFileName = "/Users/chadheise/Documents/programming/lego/pics/"
 				+ picName + ".jpg";
 		String outputFileName = "/Users/chadheise/Documents/programming/lego/pics/"
-				+ picName + "_lego_brick2.png";
+				+ picName + "_lego_brick3.png";
 		String imageFormat = "PNG"; // Use PNG not JPEG to avoid compression
 									// artifacts
 
@@ -64,35 +60,14 @@ public class Main {
 		getStats(colorGrid);
 
 		BrickGrid brickGrid = BrickGridFactory.generateBrickGrid(colorGrid);
-
-		// Simple brick splitter
-		for (int y = 0; y < brickGrid.getHeight(); y++) {
-			for (int x = 0; x < brickGrid.getWidth(); x++) {
-				int offSet = 0;
-				Brick brick = brickGrid.getBrick(x, y);
-				while (offSet + 4 < brick.getWidth()) {
-					Brick newBrick = new Brick(brick.getColor(), 4);
-					brickGrid.setBrick(newBrick, x + offSet, y);
-					offSet += 4;
-				}
-				int remainder = brick.getWidth() - offSet - 4;
-				if (remainder > 0) {
-					Brick newBrick = new Brick(brick.getColor(),
-							remainder);
-					brickGrid.setBrick(newBrick, x + brick.getWidth() - remainder, y);
-				}
-
-				x += brick.getWidth() - 1; // -1 since the for loop will
-											// increment 1
-			}
-		}
-		
+		BrickGridSplitter splitter = new SimpleBrickGridSplitter();
+		brickGrid = splitter.split(brickGrid);
 		
 		// Best place to put a seam is 2 away from a seam above or below (for bricks of length 4 or less)
 		
 		// Do this 1 row at a time:
 		// Put a line everywhere you can
-		// Combine unneccessary splits
+		// Combine unnecessary splits
 
 		BrickGridPrinter.print(brickGrid, outputFileName, imageFormat);
 

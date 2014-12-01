@@ -22,9 +22,8 @@ import lego.BrickGrid;
 import lego.BrickGridFactory;
 import lego.BrickGridPrinter;
 import lego.LegoColorPalette;
-import lego.transform.BrickGridSplitter;
+import lego.transform.BrickGridTransform;
 import lego.transform.BrickGridSplitter1;
-import lego.transform.SimpleBrickGridSplitter;
 
 public class Main {
 
@@ -33,7 +32,7 @@ public class Main {
 		String imageFileName = "/Users/chadheise/Documents/programming/lego/pics/"
 				+ picName + ".jpg";
 		String outputFileName = "/Users/chadheise/Documents/programming/lego/pics/"
-				+ picName + "_lego_brick4.png";
+				+ picName + "_lego_brick5.png";
 		String imageFormat = "PNG"; // Use PNG not JPEG to avoid compression
 									// artifacts
 
@@ -61,9 +60,10 @@ public class Main {
 		getStats(colorGrid);
 
 		BrickGrid brickGrid = BrickGridFactory.generateBrickGrid(colorGrid);
-		//BrickGridSplitter splitter = new SimpleBrickGridSplitter();
-		BrickGridSplitter splitter = new BrickGridSplitter1();
-		brickGrid = splitter.split(brickGrid);
+		BrickGridTransform splitter = new BrickGridSplitter1();
+		brickGrid = splitter.transform(brickGrid);
+//		BrickGridTransform merger = new BrickGridMerger(3);
+//		brickGrid = merger.transform(brickGrid);
 
 		BrickGridPrinter.print(brickGrid, outputFileName, imageFormat);
 

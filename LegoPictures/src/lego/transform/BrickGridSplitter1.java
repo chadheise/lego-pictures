@@ -3,7 +3,7 @@ package lego.transform;
 import lego.Brick;
 import lego.BrickGrid;
 
-public class BrickGridSplitter1 implements BrickGridSplitter {
+public class BrickGridSplitter1 implements BrickGridTransform {
 
 	// Best place to put a seam is 2 away from a seam above or below (for bricks
 	// of length 4 or less)
@@ -13,7 +13,7 @@ public class BrickGridSplitter1 implements BrickGridSplitter {
 	// Combine unnecessary splits
 
 	@Override
-	public BrickGrid split(BrickGrid brickGrid) {
+	public BrickGrid transform(BrickGrid brickGrid) {
 		BrickGrid newGrid = new BrickGrid(brickGrid);
 
 		// For first row, make largest bricks as possible, up to 4 wide
@@ -42,13 +42,10 @@ public class BrickGridSplitter1 implements BrickGridSplitter {
 				Brick brick = newGrid.getBrick(x, y);
 				// once seam is on left in previous row, add 2 (if possible) and
 				// put seam on left in current row
-				log("x: " + x, y);
 				if (isSeamOnLeftInPreviousRow(newGrid, x, y)) {
-					log("seam is on left in previous row", y);
 					int size = 1;
 					if (isNextSameColor(newGrid, x, y)) {
 						size++;
-						log("next is same color", y);
 					}
 					// if (isNextSameColor(newGrid, x + 1, y)) {
 					// size++;
@@ -81,13 +78,6 @@ public class BrickGridSplitter1 implements BrickGridSplitter {
 			return true;
 		}
 		return false;
-	}
-
-	// TODO: Remove
-	private void log(String msg, int y) {
-		if (y == 1) {
-			System.out.println(msg);
-		}
 	}
 
 }

@@ -3,10 +3,10 @@ package lego.transform;
 import lego.Brick;
 import lego.BrickGrid;
 
-public class SimpleBrickGridSplitter implements BrickGridSplitter {
+public class SimpleBrickGridSplitter implements BrickGridTransform {
 
 	@Override
-	public BrickGrid split(BrickGrid brickGrid) {
+	public BrickGrid transform(BrickGrid brickGrid) {
 		BrickGrid newGrid = new BrickGrid(brickGrid);
 		for (int y = 0; y < newGrid.getHeight(); y++) {
 			for (int x = 0; x < newGrid.getWidth(); x++) {

@@ -23,6 +23,7 @@ import lego.BrickGridFactory;
 import lego.BrickGridPrinter;
 import lego.LegoColorPalette;
 import lego.transform.BrickGridSplitter;
+import lego.transform.BrickGridSplitter1;
 import lego.transform.SimpleBrickGridSplitter;
 
 public class Main {
@@ -32,7 +33,7 @@ public class Main {
 		String imageFileName = "/Users/chadheise/Documents/programming/lego/pics/"
 				+ picName + ".jpg";
 		String outputFileName = "/Users/chadheise/Documents/programming/lego/pics/"
-				+ picName + "_lego_brick3.png";
+				+ picName + "_lego_brick4.png";
 		String imageFormat = "PNG"; // Use PNG not JPEG to avoid compression
 									// artifacts
 
@@ -60,14 +61,9 @@ public class Main {
 		getStats(colorGrid);
 
 		BrickGrid brickGrid = BrickGridFactory.generateBrickGrid(colorGrid);
-		BrickGridSplitter splitter = new SimpleBrickGridSplitter();
+		//BrickGridSplitter splitter = new SimpleBrickGridSplitter();
+		BrickGridSplitter splitter = new BrickGridSplitter1();
 		brickGrid = splitter.split(brickGrid);
-		
-		// Best place to put a seam is 2 away from a seam above or below (for bricks of length 4 or less)
-		
-		// Do this 1 row at a time:
-		// Put a line everywhere you can
-		// Combine unnecessary splits
 
 		BrickGridPrinter.print(brickGrid, outputFileName, imageFormat);
 

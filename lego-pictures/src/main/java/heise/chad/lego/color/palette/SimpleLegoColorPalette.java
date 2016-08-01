@@ -3,9 +3,6 @@ package heise.chad.lego.color.palette;
 import java.awt.Color;
 import java.util.Set;
 
-import heise.chad.lego.generic.color.palette.ColorPalette;
-import heise.chad.lego.generic.color.palette.FixedColorPalette;
-
 public final class SimpleLegoColorPalette implements ColorPalette {
 
 	private final ColorPalette delegatePalette;

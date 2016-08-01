@@ -1,6 +1,5 @@
 .metadata
 .DS_Store
-bin/
-pics/
-_*
-.recommenders*
+.classpath
+.project
+.settings

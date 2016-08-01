@@ -1,6 +1,6 @@
 package generic.color.palette;
 
-import generic.color.comparator.ColorComparator;
+import generic.color.measure.ColorMeasure;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -10,9 +10,9 @@ import java.util.TreeMap;
 public abstract class ComparatorColorPalette implements ColorPalette {
 	
 	protected Map<Integer, Color> RGBToColor = new TreeMap<Integer, Color>();
-	private ColorComparator colorComparator;
+	private ColorMeasure colorComparator;
 	
-	public ComparatorColorPalette(ColorComparator colorComparator) {
+	public ComparatorColorPalette(ColorMeasure colorComparator) {
 		this.colorComparator = colorComparator;
 	}
 	

@@ -1,25 +1,37 @@
 package generic.transform;
 
-import generic.color.grid.ColorGrid;
-
+import java.util.ArrayList;
 import java.util.List;
 
+public final class CompositeTransform<T> implements Transform<T> {
 
-public class CompositeTransform implements ColorGridTransform {
+	private List<Transform<T>> transforms;
 
-	List<ColorGridTransform> transforms;
-	
-	public CompositeTransform(List<ColorGridTransform> transforms) {
+	private CompositeTransform(List<Transform<T>> transforms) {
 		this.transforms = transforms;
 	}
-	
+
 	@Override
-	public ColorGrid transform(ColorGrid colorGrid) {
-		ColorGrid output = colorGrid;
-		for (ColorGridTransform transform : transforms) {
+	public T transform(T obj) {
+		T output = obj;
+		for (Transform<T> transform : transforms) {
 			output = transform.transform(output);
 		}
 		return output;
+	}
+
+	public static final class Builder<T> {
+		List<Transform<T>> builderTransforms = new ArrayList<Transform<T>>();
+
+		public Builder<T> withTransform(Transform<T> transform) {
+			builderTransforms.add(transform);
+			return this;
+		}
+
+		public CompositeTransform<T> build() {
+			return new CompositeTransform<T>(builderTransforms);
+		}
+
 	}
 
 }

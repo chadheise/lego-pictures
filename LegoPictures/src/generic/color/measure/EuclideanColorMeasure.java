@@ -1,8 +1,8 @@
-package generic.color.comparator;
+package generic.color.measure;
 
 import java.awt.Color;
 
-public class EuclideanColorComparator implements ColorComparator {
+public class EuclideanColorMeasure implements ColorMeasure {
 
 	@Override
 	public double getDistance(Color color1, Color color2) {

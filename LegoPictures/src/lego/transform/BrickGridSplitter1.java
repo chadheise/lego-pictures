@@ -1,9 +1,10 @@
 package lego.transform;
 
+import generic.transform.Transform;
 import lego.Brick;
 import lego.BrickGrid;
 
-public class BrickGridSplitter1 implements BrickGridTransform {
+public class BrickGridSplitter1 implements Transform<BrickGrid> {
 
 	// Best place to put a seam is 2 away from a seam above or below (for bricks
 	// of length 4 or less)
@@ -64,7 +65,8 @@ public class BrickGridSplitter1 implements BrickGridTransform {
 		int previousRow = row - 1;
 		if (column <= 0) { // The left side of the image is treated as a seam
 			return true;
-		} else if (brickGrid.getBrick(column - 1, previousRow) == brickGrid.getBrick(column, previousRow)) {
+		} else if (brickGrid.getBrick(column - 1, previousRow) == brickGrid
+				.getBrick(column, previousRow)) {
 			return true;
 		}
 		return false;

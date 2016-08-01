@@ -1,9 +1,10 @@
 package lego.transform;
 
+import generic.transform.Transform;
 import lego.Brick;
 import lego.BrickGrid;
 
-public class SimpleBrickGridSplitter implements BrickGridTransform {
+public class SimpleBrickGridSplitter implements Transform<BrickGrid> {
 
 	@Override
 	public BrickGrid transform(BrickGrid brickGrid) {
@@ -19,9 +20,9 @@ public class SimpleBrickGridSplitter implements BrickGridTransform {
 				}
 				int remainder = brick.getWidth() - offSet - 4;
 				if (remainder > 0) {
-					Brick newBrick = new Brick(brick.getColor(),
-							remainder);
-					newGrid.setBrick(newBrick, x + brick.getWidth() - remainder, y);
+					Brick newBrick = new Brick(brick.getColor(), remainder);
+					newGrid.setBrick(newBrick,
+							x + brick.getWidth() - remainder, y);
 				}
 
 				x += brick.getWidth() - 1; // -1 since the for loop will

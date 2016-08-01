@@ -1,9 +1,10 @@
 package lego.transform;
 
+import generic.transform.Transform;
 import lego.Brick;
 import lego.BrickGrid;
 
-public class BrickGridMerger implements BrickGridTransform {
+public class BrickGridMerger implements Transform<BrickGrid> {
 
 	private final int mergeWidth;
 

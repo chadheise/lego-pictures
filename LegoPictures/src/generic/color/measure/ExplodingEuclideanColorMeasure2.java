@@ -1,8 +1,8 @@
-package generic.color.comparator;
+package generic.color.measure;
 
 import java.awt.Color;
 
-public class ExplodingEuclideanColorComparator2 implements ColorComparator {
+public class ExplodingEuclideanColorMeasure2 implements ColorMeasure {
 
 	private int threshold;
 	
@@ -10,7 +10,7 @@ public class ExplodingEuclideanColorComparator2 implements ColorComparator {
 	private double gFactor;
 	private double bFactor;
 	
-	public ExplodingEuclideanColorComparator2(double rFactor, double gFactor, double bFactor, int threshold) {
+	public ExplodingEuclideanColorMeasure2(double rFactor, double gFactor, double bFactor, int threshold) {
 		this.rFactor = rFactor;
 		this.gFactor = gFactor;
 		this.bFactor = bFactor;

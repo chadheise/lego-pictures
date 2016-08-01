@@ -1,8 +1,8 @@
-package generic.color.comparator;
+package generic.color.measure;
 
 import java.awt.Color;
 
-public class MaxColorComparator implements ColorComparator {
+public class MaxColorMeasure implements ColorMeasure {
 
 	@Override
 	public double getDistance(Color color1, Color color2) {

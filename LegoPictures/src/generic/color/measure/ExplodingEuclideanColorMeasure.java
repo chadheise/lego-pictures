@@ -1,14 +1,14 @@
-package generic.color.comparator;
+package generic.color.measure;
 
 import java.awt.Color;
 
-public class ExplodingEuclideanColorComparator implements ColorComparator {
+public class ExplodingEuclideanColorMeasure implements ColorMeasure {
 
 	private double rFactor;
 	private double gFactor;
 	private double bFactor;
 	
-	public ExplodingEuclideanColorComparator(double rFactor, double gFactor, double bFactor) {
+	public ExplodingEuclideanColorMeasure(double rFactor, double gFactor, double bFactor) {
 		this.rFactor = rFactor;
 		this.gFactor = gFactor;
 		this.bFactor = bFactor;

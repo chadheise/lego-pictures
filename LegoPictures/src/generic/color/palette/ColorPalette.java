@@ -1,7 +1,10 @@
 package generic.color.palette;
 
 import java.awt.Color;
+import java.util.Set;
 
 public interface ColorPalette {
-	public Color getClosestColor(Color color);
+
+	public Set<Color> getColors();
+
 }

@@ -10,8 +10,7 @@ import heise.chad.lego.color.palette.ColorPalette;
 
 /**
  * Transforms one color into another by finding the closest color in a provided
- * color palette. Closeness is determined by the provided ColorComparator
- * strategy.
+ * color palette. Closeness is determined by the provided ColorMeasure strategy.
  *
  */
 public class ColorPaletteColorTransform implements Function<Color, Color> {

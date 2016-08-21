@@ -1,19 +1,23 @@
 package heise.chad.lego.pictures.example;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 
+import javax.imageio.ImageIO;
+
 import heise.chad.lego.brick.grid.BrickGrid;
-import heise.chad.lego.brick.grid.BrickGridPrinter;
 import heise.chad.lego.brick.grid.BrickGridSplitter1;
 import heise.chad.lego.brick.grid.BrickGridTransform;
+import heise.chad.lego.brick.grid.BufferedImageBrickGridTransform;
+import heise.chad.lego.color.grid.BufferedImageColorGridTransform;
 import heise.chad.lego.color.grid.ColorColorGridTransform;
 import heise.chad.lego.color.grid.ColorGrid;
-import heise.chad.lego.color.grid.ImageFileColorGrid;
 import heise.chad.lego.color.grid.LegoRectangleColorGridTransform;
 import heise.chad.lego.color.measure.ColorMeasure;
 import heise.chad.lego.color.measure.ExplodingEuclideanColorMeasure2;
@@ -35,15 +39,17 @@ public class Main {
         ColorMeasure colorMeasure = new ExplodingEuclideanColorMeasure2(.5, .7, .8, 20);
         Function<Color, Color> colorTransform = new ColorPaletteColorTransform(palette, colorMeasure);
 
-        Function<ColorGrid, BrickGrid> fxn = new LegoRectangleColorGridTransform(60)
+        Function<BufferedImage, BrickGrid> fxn = new BufferedImageColorGridTransform()
+                .andThen(new LegoRectangleColorGridTransform(60))
                 .andThen(new ColorColorGridTransform(colorTransform))
                 .andThen(new BrickGridTransform())
                 .andThen(new BrickGridSplitter1());
 
-        ColorGrid colorGrid = new ImageFileColorGrid(imageFileName);
+        BufferedImage inputImage = ImageIO.read(new File(imageFileName));
+        BrickGrid brickGrid = fxn.apply(inputImage);
+        BufferedImage outputImage = new BufferedImageBrickGridTransform().apply(brickGrid);
+        ImageIO.write(outputImage, imageFormat, new File(outputFileName));
 
-        BrickGrid brickGrid = fxn.apply(colorGrid);
-        BrickGridPrinter.print(brickGrid, outputFileName, imageFormat);
         getStats(brickGrid);
     }
 

@@ -49,8 +49,8 @@ public class LegoRectangleColorGridTransform implements Function<ColorGrid, Colo
     private int getGridHeight(ColorGrid colorGrid) {
         double heightWidthRatio = (double) colorGrid.getHeight()
                 / (double) colorGrid.getWidth();
-        double brickWidthToHeightRatio = BrickUnit.millimeterWidth
-                / BrickUnit.millimeterHeight;
+        double brickWidthToHeightRatio = BrickUnit.MILLIMETER_WIDTH
+                / BrickUnit.MILLIMETER_HEIGHT;
         return (int) Math.round(heightWidthRatio * brickWidthToHeightRatio
                 * (double) desiredWidth);
 

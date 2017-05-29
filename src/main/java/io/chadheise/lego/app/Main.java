@@ -1,4 +1,4 @@
-package io.chadheise.lego.pictures.example;
+package io.chadheise.lego.app;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 
 import javax.imageio.ImageIO;
+
+import com.beust.jcommander.JCommander;
 
 import io.chadheise.lego.brick.grid.BrickGrid;
 import io.chadheise.lego.brick.grid.BrickGridSplitter1;
@@ -27,13 +29,22 @@ import io.chadheise.lego.color.transform.ColorPaletteColorTransform;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] argv) throws IOException {
         String picName = "GoldenDome";
         String baseDir = "/Users/chadheise/Documents/programming/lego/pics/";
         String imageFileName = baseDir + picName + ".jpg";
         String outputFileName = baseDir + picName + "_lego_brick.png";
         String imageFormat = "PNG"; // Use PNG not JPEG to avoid compression
                                     // artifacts
+
+        Args args = new Args();
+        JCommander.newBuilder()
+                .addObject(args)
+                .args(argv)
+                .build();
+
+        System.out.println("input: " + args.getInput());
+        System.out.println("output: " + args.getOutput());
 
         ColorPalette palette = new LegoColorPalette();
         ColorMeasure colorMeasure = new ExplodingEuclideanColorMeasure2(.5, .7, .8, 20);

@@ -20,7 +20,7 @@ This README would normally document whatever steps are necessary to get your app
 * Deployment instructions
 
 ### Build ###
-mvn package
+`mvn package`
 
 ### Execute ###
-java -jar target/lego-pictures-jar-with-dependencies.jar --input blah --output oh
+`java -jar target/lego-pictures-jar-with-dependencies.jar --input inputFile.jpg --output outputFile.png`

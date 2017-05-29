@@ -5,17 +5,17 @@ import com.beust.jcommander.Parameter;
 public class Args {
 
     @Parameter(names = "--input", description = "The path of the input file (jpg) to convert")
-    private String input;
+    private String inputFile;
 
     @Parameter(names = "--output", description = "The name and location to put the output file (png)")
-    private String output;
+    private String outputFile;
 
-    public String getInput() {
-        return input;
+    public String getInputFile() {
+        return inputFile;
     }
 
-    public String getOutput() {
-        return output;
+    public String getOutputFile() {
+        return outputFile;
     }
 
 }

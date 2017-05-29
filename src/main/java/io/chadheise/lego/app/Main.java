@@ -29,11 +29,7 @@ import io.chadheise.lego.color.transform.ColorPaletteColorTransform;
 
 public class Main {
 
-    public static void main(String[] argv) throws IOException {
-        String picName = "GoldenDome";
-        String baseDir = "/Users/chadheise/Documents/programming/lego/pics/";
-        String imageFileName = baseDir + picName + ".jpg";
-        String outputFileName = baseDir + picName + "_lego_brick.png";
+    public static void main(final String[] argv) throws IOException {
         String imageFormat = "PNG"; // Use PNG not JPEG to avoid compression
                                     // artifacts
 
@@ -42,9 +38,6 @@ public class Main {
                 .addObject(args)
                 .args(argv)
                 .build();
-
-        System.out.println("input: " + args.getInput());
-        System.out.println("output: " + args.getOutput());
 
         ColorPalette palette = new LegoColorPalette();
         ColorMeasure colorMeasure = new ExplodingEuclideanColorMeasure2(.5, .7, .8, 20);
@@ -56,10 +49,10 @@ public class Main {
                 .andThen(new BrickGridTransform())
                 .andThen(new BrickGridSplitter1());
 
-        BufferedImage inputImage = ImageIO.read(new File(imageFileName));
+        BufferedImage inputImage = ImageIO.read(new File(args.getInputFile()));
         BrickGrid brickGrid = fxn.apply(inputImage);
         BufferedImage outputImage = new BufferedImageBrickGridTransform().apply(brickGrid);
-        ImageIO.write(outputImage, imageFormat, new File(outputFileName));
+        ImageIO.write(outputImage, imageFormat, new File(args.getOutputFile()));
 
         getStats(brickGrid);
     }

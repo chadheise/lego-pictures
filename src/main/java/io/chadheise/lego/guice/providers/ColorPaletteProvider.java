@@ -1,11 +1,12 @@
 package io.chadheise.lego.guice.providers;
 
 import java.awt.Color;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import com.google.inject.Provider;
@@ -13,41 +14,33 @@ import com.google.inject.Provider;
 import io.chadheise.lego.color.palette.ColorPalette;
 import io.chadheise.lego.color.palette.FixedColorPalette;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class ColorPaletteProvider implements Provider<ColorPalette> {
 
-    private static final String FILE_PATH = "resources/colorPalettes/lego.csv";
+    private static final String FILE_PATH = "/colorPalettes/lego.csv";
 
     @Override
     public ColorPalette get() {
-
-        System.out.println("Inside color pallete provider");
-        System.out.println(getClass());
-
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("colorPalettes/lego.csv").getFile());
-        System.out.println("File: " + file);
-
-        try {
-            System.out.println(getClass().getResource("/resources/colorPalettes/lego.csv").toURI());
-
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
         FixedColorPalette.Builder bldr = new FixedColorPalette.Builder();
-        try (Stream<String> stream = Files.lines(Paths.get(FILE_PATH))) {
-            stream.forEach(l -> {
-                System.out.println(l);
-                String[] rgbVals = l.split(",");
-                int r = Integer.valueOf(rgbVals[0]);
-                int g = Integer.valueOf(rgbVals[1]);
-                int b = Integer.valueOf(rgbVals[2]);
+
+        try (InputStream input = getClass().getResourceAsStream(FILE_PATH)) {
+            assert input != null;
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(input));
+            br.readLine(); // Ignore first line of headers
+            String line = br.readLine(); // Get the first line of RGB values
+
+            while (line != null) {
+                String[] rgbValues = line.split(",");
+                int r = Integer.parseInt(rgbValues[0]);
+                int g = Integer.parseInt(rgbValues[1]);
+                int b = Integer.parseInt(rgbValues[2]);
                 bldr.withColor(new Color(r, g, b));
-            });
+                line = br.readLine();
+            }
+            return bldr.build();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
-
 }

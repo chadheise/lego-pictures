@@ -12,6 +12,8 @@ import java.util.function.Function;
 import javax.imageio.ImageIO;
 
 import com.beust.jcommander.JCommander;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 import io.chadheise.lego.brick.grid.BrickGrid;
 import io.chadheise.lego.brick.grid.BrickGridSplitter1;
@@ -26,6 +28,7 @@ import io.chadheise.lego.color.measure.ExplodingEuclideanColorMeasure2;
 import io.chadheise.lego.color.palette.ColorPalette;
 import io.chadheise.lego.color.palette.LegoColorPalette;
 import io.chadheise.lego.color.transform.ColorPaletteColorTransform;
+import io.chadheise.lego.guice.LegoModule;
 
 public class Main {
 
@@ -38,6 +41,9 @@ public class Main {
                 .addObject(args)
                 .args(argv)
                 .build();
+
+        Injector injector = Guice.createInjector(new LegoModule());
+        ColorPalette p = injector.getInstance(ColorPalette.class);
 
         ColorPalette palette = new LegoColorPalette();
         ColorMeasure colorMeasure = new ExplodingEuclideanColorMeasure2(.5, .7, .8, 20);

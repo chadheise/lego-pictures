@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import io.chadheise.lego.brick.Brick;
 
+/* Splits a brick grid up into smaller individual bricks that have staggered seams */
 public class BrickGridSplitter1 implements Function<BrickGrid, BrickGrid> {
 
     // Best place to put a seam is 2 away from a seam above or below (for bricks
@@ -33,7 +34,7 @@ public class BrickGridSplitter1 implements Function<BrickGrid, BrickGrid> {
             }
 
             x += brick.getWidth() - 1; // -1 since the for loop will
-                                       // increment 1
+            // increment 1
         }
 
         // Place a seem 2 away from a seem in the previous row, then recombine
@@ -61,7 +62,7 @@ public class BrickGridSplitter1 implements Function<BrickGrid, BrickGrid> {
     }
 
     private boolean isSeamOnLeftInPreviousRow(BrickGrid brickGrid, int column,
-            int row) {
+                                              int row) {
         int previousRow = row - 1;
         if (column <= 0) { // The left side of the image is treated as a seam
             return true;

@@ -33,8 +33,8 @@ import io.chadheise.lego.guice.LegoModule;
 public class Main {
 
     public static void main(final String[] argv) throws IOException {
-        String imageFormat = "PNG"; // Use PNG not JPEG to avoid compression
-                                    // artifacts
+        // Use PNG not JPEG to avoid compression artifacts
+        String imageFormat = "PNG";
 
         Args args = new Args();
         JCommander.newBuilder()

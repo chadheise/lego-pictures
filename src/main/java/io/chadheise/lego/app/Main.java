@@ -24,7 +24,9 @@ import io.chadheise.lego.color.grid.ColorColorGridTransform;
 import io.chadheise.lego.color.grid.ColorGrid;
 import io.chadheise.lego.color.grid.LegoRectangleColorGridTransform;
 import io.chadheise.lego.color.measure.ColorMeasure;
+import io.chadheise.lego.color.measure.EuclideanColorMeasure;
 import io.chadheise.lego.color.measure.ExplodingEuclideanColorMeasure2;
+import io.chadheise.lego.color.measure.RecenteredColorMeasure;
 import io.chadheise.lego.color.palette.ColorPalette;
 import io.chadheise.lego.color.palette.LegoColorPalette;
 import io.chadheise.lego.color.transform.ColorPaletteColorTransform;
@@ -43,20 +45,28 @@ public class Main {
                 .build();
 
         Injector injector = Guice.createInjector(new LegoModule());
-        ColorPalette p = injector.getInstance(ColorPalette.class);
+        ColorPalette palette = injector.getInstance(ColorPalette.class);
 
-        ColorPalette palette = new LegoColorPalette();
-        ColorMeasure colorMeasure = new ExplodingEuclideanColorMeasure2(.5, .7, .8, 20);
-        Function<Color, Color> colorTransform = new ColorPaletteColorTransform(palette, colorMeasure);
+        Function<BufferedImage, ColorGrid> rectangle_fxn = new BufferedImageColorGridTransform()
+                .andThen(new LegoRectangleColorGridTransform(60));
 
-        Function<BufferedImage, BrickGrid> fxn = new BufferedImageColorGridTransform()
-                .andThen(new LegoRectangleColorGridTransform(60))
-                .andThen(new ColorColorGridTransform(colorTransform))
+        BufferedImage inputImage = ImageIO.read(new File(args.getInputFile()));
+        ColorGrid colorGrid = rectangle_fxn.apply(inputImage);
+        
+        ColorMeasure euclideanColorMeasure = new EuclideanColorMeasure();
+        ColorMeasure recenteredColorMeasure = new RecenteredColorMeasure(palette, colorGrid, euclideanColorMeasure);
+        // ColorMeasure colorMeasure = new ExplodingEuclideanColorMeasure2(.5, .7, .8, 20);
+        Function<Color, Color> colorTransform = new ColorPaletteColorTransform(palette, recenteredColorMeasure);
+
+        Function<ColorGrid, BrickGrid> fxn = new ColorColorGridTransform(colorTransform)
                 .andThen(new BrickGridTransform())
                 .andThen(new BrickGridSplitter1());
 
-        BufferedImage inputImage = ImageIO.read(new File(args.getInputFile()));
-        BrickGrid brickGrid = fxn.apply(inputImage);
+        // Apply grid without converting to lego colors
+//        Function<ColorGrid, BrickGrid> fxn2 = new BrickGridTransform()
+//                .andThen(new BrickGridSplitter1());
+
+        BrickGrid brickGrid = fxn.apply(colorGrid);
         BufferedImage outputImage = new BufferedImageBrickGridTransform().apply(brickGrid);
         ImageIO.write(outputImage, imageFormat, new File(args.getOutputFile()));
 
@@ -64,7 +74,7 @@ public class Main {
     }
 
     private static void getStats(ColorGrid canvas) {
-        Map<Color, Integer> map = new HashMap<Color, Integer>();
+        Map<Color, Integer> map = new HashMap<>();
         for (int x = 0; x < canvas.getWidth(); x++) {
             for (int y = 0; y < canvas.getHeight(); y++) {
                 Color color = canvas.getColor(x, y);

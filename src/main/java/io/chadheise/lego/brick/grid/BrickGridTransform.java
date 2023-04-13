@@ -6,7 +6,7 @@ import java.util.function.Function;
 import io.chadheise.lego.brick.Brick;
 import io.chadheise.lego.color.grid.ColorGrid;
 
-/* Converts a color grid into a brick gid by combining adjacent pixels of the
+/* Converts a color grid into a brick grid by combining adjacent pixels of the
    same color into a single, wide brick */
 public class BrickGridTransform implements Function<ColorGrid, BrickGrid> {
 

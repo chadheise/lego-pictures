@@ -52,21 +52,24 @@ public class Main {
 
         BufferedImage inputImage = ImageIO.read(new File(args.getInputFile()));
         ColorGrid colorGrid = rectangle_fxn.apply(inputImage);
-        
-        ColorMeasure euclideanColorMeasure = new EuclideanColorMeasure();
-        ColorMeasure recenteredColorMeasure = new RecenteredColorMeasure(palette, colorGrid, euclideanColorMeasure);
+
         // ColorMeasure colorMeasure = new ExplodingEuclideanColorMeasure2(.5, .7, .8, 20);
-        Function<Color, Color> colorTransform = new ColorPaletteColorTransform(palette, recenteredColorMeasure);
+        // RecenteredColorMeasure uses the full palette to add detail at the expense of color accuracy
+        ColorMeasure euclideanColorMeasure = new EuclideanColorMeasure();
+        ColorMeasure colorMeasure = new RecenteredColorMeasure(palette, colorGrid, euclideanColorMeasure);
+        Function<Color, Color> colorTransform = new ColorPaletteColorTransform(palette, colorMeasure);
 
         Function<ColorGrid, BrickGrid> fxn = new ColorColorGridTransform(colorTransform)
                 .andThen(new BrickGridTransform())
                 .andThen(new BrickGridSplitter1());
 
         // Apply grid without converting to lego colors
-//        Function<ColorGrid, BrickGrid> fxn2 = new BrickGridTransform()
-//                .andThen(new BrickGridSplitter1());
+        // Function<ColorGrid, BrickGrid> fxn2 = new BrickGridTransform()
+        //    .andThen(new BrickGridSplitter1());
+        // BrickGrid brickGrid = fxn2.apply(colorGrid);
 
         BrickGrid brickGrid = fxn.apply(colorGrid);
+
         BufferedImage outputImage = new BufferedImageBrickGridTransform().apply(brickGrid);
         ImageIO.write(outputImage, imageFormat, new File(args.getOutputFile()));
 
@@ -88,7 +91,6 @@ public class Main {
         for (Entry<Color, Integer> entry : map.entrySet()) {
             System.out.println(entry.getValue() + ": " + entry.getKey());
         }
-
     }
 
 }

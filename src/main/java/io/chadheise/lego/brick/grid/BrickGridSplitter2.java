@@ -49,6 +49,18 @@ public class BrickGridSplitter2 implements Function<BrickGrid, BrickGrid> {
                         newGrid.setBrick(remainingBrick, w + newBrickWidth, h);
                     }
 
+                    // Because we prioritized bricks of width 2 over width 3, its possible we will
+                    // end up with some bricks of width 2 next to a brick of width 1 of the same color
+                    // based on where the seams are. If this happens, re-combine them into a single
+                    // brick of width 3
+                    if (newBrickWidth == 1 && w != 0) {
+                        Brick previousBrick = newGrid.getBrick(w - 1, h);
+                        if (previousBrick.getWidth() == 2 && previousBrick.getColor() == newBrick.getColor()) {
+                            Brick threeWideBrick = new Brick(newBrick.getColor(), 3);
+                            newGrid.setBrick(threeWideBrick, w - 2, h);
+                        }
+                    }
+
                     // Increment one less than width since for loop also increments 1
                     w += newBrickWidth - 1;
                 }
@@ -81,7 +93,6 @@ public class BrickGridSplitter2 implements Function<BrickGrid, BrickGrid> {
                 return true;
             }
         }
-
 
         return false;
     }

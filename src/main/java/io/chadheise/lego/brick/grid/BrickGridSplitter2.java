@@ -19,16 +19,23 @@ public class BrickGridSplitter2 implements Function<BrickGrid, BrickGrid> {
                     // Increment one less than width since for loop also increments 1
                     w += brick.getWidth() - 1;
                 } else {
-                    // Prefer the largest brick possible that doesn't line up with a seam
-                    // but if a seam is inevitable regardless of width, just use the largest
-                    // allowed brick width
-                    int maxBrickWidth = 4;
-                    int newBrickWidth = maxBrickWidth;
-                    for (int n = maxBrickWidth; n > 0; n--) {
-                        if (!hasSeamInPreviousRow(newGrid, w + n, h)) {
-                            newBrickWidth = n;
-                            break;
-                        }
+                    int newBrickWidth;
+
+                    // This order is important. Prefer full, 4 width bricks if possible
+                    if (!hasSeamInPreviousRow(newGrid, w + 4, h)) {
+                        newBrickWidth = 4;
+                    } else if (!hasSeamInPreviousRow(newGrid, w + 2, h)) {
+                        // Next, prefer bricks of size 2 so the seams are in the middle of 4-wide bricks
+                        newBrickWidth = 2;
+                    } else if (!hasSeamInPreviousRow(newGrid, w + 3, h)) {
+                        // Since the seam won't be in the middle, use the next largest brick (3)
+                        newBrickWidth = 3;
+                    } else if (!hasSeamInPreviousRow(newGrid, w + 1, h)) {
+                        // Use size 1 if necessary to avoid a seam
+                        newBrickWidth = 1;
+                    } else {
+                        // If a seam cannot be avoided, use the largest standard brick (4)
+                        newBrickWidth = 4;
                     }
 
                     // Split brick into 2

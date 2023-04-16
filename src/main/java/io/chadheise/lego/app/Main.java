@@ -15,10 +15,7 @@ import com.beust.jcommander.JCommander;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import io.chadheise.lego.brick.grid.BrickGrid;
-import io.chadheise.lego.brick.grid.BrickGridSplitter1;
-import io.chadheise.lego.brick.grid.BrickGridTransform;
-import io.chadheise.lego.brick.grid.BufferedImageBrickGridTransform;
+import io.chadheise.lego.brick.grid.*;
 import io.chadheise.lego.color.grid.BufferedImageColorGridTransform;
 import io.chadheise.lego.color.grid.ColorColorGridTransform;
 import io.chadheise.lego.color.grid.ColorGrid;
@@ -61,7 +58,7 @@ public class Main {
 
         Function<ColorGrid, BrickGrid> fxn = new ColorColorGridTransform(colorTransform)
                 .andThen(new BrickGridTransform())
-                .andThen(new BrickGridSplitter1());
+                .andThen(new BrickGridSplitter2());
 
         // Apply grid without converting to lego colors
         // Function<ColorGrid, BrickGrid> fxn2 = new BrickGridTransform()

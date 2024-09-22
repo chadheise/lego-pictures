@@ -10,6 +10,10 @@
     <name>lego-pictures</name>
     <url>http://chadheise.io</url>
 
+    <properties>
+        <maven.compiler.release>23</maven.compiler.release>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -33,6 +37,14 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>23</release>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>

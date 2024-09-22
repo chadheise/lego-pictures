@@ -17,15 +17,18 @@ import io.chadheise.lego.color.palette.FixedColorPalette;
 @SuppressWarnings("SpellCheckingInspection")
 public class ColorPaletteProvider implements Provider<ColorPalette> {
 
-    private static final String FILE_PATH = "/colorPalettes/lego.csv";
+    /* File path to a CSV file of 3 columns representing R, G, & B color values */
+    private final String filePath;
+
+    public ColorPaletteProvider(String filePath) {
+        this.filePath = filePath;
+    }
 
     @Override
     public ColorPalette get() {
         FixedColorPalette.Builder bldr = new FixedColorPalette.Builder();
 
-        try (InputStream input = getClass().getResourceAsStream(FILE_PATH)) {
-            assert input != null;
-
+        try (InputStream input = new FileInputStream(this.filePath)) {
             BufferedReader br = new BufferedReader(new InputStreamReader(input));
             br.readLine(); // Ignore first line of headers
             String line = br.readLine(); // Get the first line of RGB values

@@ -7,10 +7,16 @@ import io.chadheise.lego.guice.providers.ColorPaletteProvider;
 
 public class LegoModule extends AbstractModule {
 
+    private final String colorPaletteFilePath;
+
+    public LegoModule(String colorPaletteFilePath) {
+        this.colorPaletteFilePath = colorPaletteFilePath;
+    }
+
     @Override
     protected void configure() {
 
-        bind(ColorPalette.class).toProvider(ColorPaletteProvider.class);
+        bind(ColorPalette.class).toProvider(new ColorPaletteProvider(this.colorPaletteFilePath));
 
     }
 

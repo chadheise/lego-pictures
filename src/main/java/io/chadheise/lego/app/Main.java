@@ -41,7 +41,7 @@ public class Main {
                 .args(argv)
                 .build();
 
-        Injector injector = Guice.createInjector(new LegoModule());
+        Injector injector = Guice.createInjector(new LegoModule(args.getColorsFile()));
         ColorPalette palette = injector.getInstance(ColorPalette.class);
 
         Function<BufferedImage, ColorGrid> rectangle_fxn = new BufferedImageColorGridTransform()

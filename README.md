@@ -6,4 +6,4 @@ This application takes a jpeg image and coverts it to an image that could be con
     mvn package
 
 ### Execute ###
-    java -jar target/lego-pictures-jar-with-dependencies.jar --input inputFile.jpg --output outputFile.png
+    java -jar target/lego-pictures-jar-with-dependencies.jar --input inputFile.jpg --output outputFile.png --colors colorPalettes/lego.csv

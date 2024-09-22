@@ -13,6 +13,9 @@ public class Args {
     @Parameter(names = "--colors", description = "The path of a CSV file containing RGB color values to use in the output")
     private String colorsFile;
 
+    @Parameter(names = "--width", description = "The width of the output where 1 unit corresponds to a 1x1 lego brick")
+    private int width;
+
     public String getInputFile() {
         return inputFile;
     }
@@ -23,6 +26,10 @@ public class Args {
 
     public String getColorsFile() {
         return colorsFile;
+    }
+
+    public int getWidth() {
+        return width;
     }
 
 }

@@ -45,7 +45,7 @@ public class Main {
         ColorPalette palette = injector.getInstance(ColorPalette.class);
 
         Function<BufferedImage, ColorGrid> rectangle_fxn = new BufferedImageColorGridTransform()
-                .andThen(new LegoRectangleColorGridTransform(60));
+                .andThen(new LegoRectangleColorGridTransform(args.getWidth()));
 
         BufferedImage inputImage = ImageIO.read(new File(args.getInputFile()));
         ColorGrid colorGrid = rectangle_fxn.apply(inputImage);

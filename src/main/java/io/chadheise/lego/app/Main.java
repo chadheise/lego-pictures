@@ -20,10 +20,7 @@ import io.chadheise.lego.color.grid.BufferedImageColorGridTransform;
 import io.chadheise.lego.color.grid.ColorColorGridTransform;
 import io.chadheise.lego.color.grid.ColorGrid;
 import io.chadheise.lego.color.grid.LegoRectangleColorGridTransform;
-import io.chadheise.lego.color.measure.ColorMeasure;
-import io.chadheise.lego.color.measure.EuclideanColorMeasure;
-import io.chadheise.lego.color.measure.ExplodingEuclideanColorMeasure2;
-import io.chadheise.lego.color.measure.RecenteredColorMeasure;
+import io.chadheise.lego.color.measure.*;
 import io.chadheise.lego.color.palette.ColorPalette;
 import io.chadheise.lego.color.palette.LegoColorPalette;
 import io.chadheise.lego.color.transform.ColorPaletteColorTransform;
@@ -52,8 +49,9 @@ public class Main {
 
         // ColorMeasure colorMeasure = new ExplodingEuclideanColorMeasure2(.5, .7, .8, 20);
         // RecenteredColorMeasure uses the full palette to add detail at the expense of color accuracy
-        ColorMeasure euclideanColorMeasure = new EuclideanColorMeasure();
-        ColorMeasure colorMeasure = new RecenteredColorMeasure(palette, colorGrid, euclideanColorMeasure);
+        // ColorMeasure euclideanColorMeasure = new EuclideanColorMeasure();
+        // ColorMeasure colorMeasure = new RecenteredColorMeasure(palette, colorGrid, euclideanColorMeasure);
+        ColorMeasure colorMeasure = new LabColorMeasure();
         Function<Color, Color> colorTransform = new ColorPaletteColorTransform(palette, colorMeasure);
 
         Function<ColorGrid, BrickGrid> fxn = new ColorColorGridTransform(colorTransform)

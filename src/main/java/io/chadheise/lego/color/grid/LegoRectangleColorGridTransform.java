@@ -6,18 +6,20 @@ import java.util.HashSet;
 import java.util.function.Function;
 
 import io.chadheise.lego.brick.BrickUnit;
+import io.chadheise.lego.color.merger.ColorMerger;
 
 /**
  * Takes as input a color grid and compresses the width and height to match a
  * desired width using rectangle Lego shaped pixels.
- * 
  */
 public class LegoRectangleColorGridTransform implements Function<ColorGrid, ColorGrid> {
 
-    private int desiredWidth;
+    private final int desiredWidth;
+    private final ColorMerger colorMerger;
 
-    public LegoRectangleColorGridTransform(int desiredWidth) {
+    public LegoRectangleColorGridTransform(int desiredWidth, ColorMerger colorMerger) {
         this.desiredWidth = desiredWidth;
+        this.colorMerger = colorMerger;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class LegoRectangleColorGridTransform implements Function<ColorGrid, Colo
 
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                Color gridColor = averageColors(getGridColors(colorGrid, x, y));
+                Color gridColor = this.colorMerger.apply(getGridColors(colorGrid, x, y));
                 outputColorGrid.setColor(gridColor, x, y);
             }
         }
@@ -70,24 +72,6 @@ public class LegoRectangleColorGridTransform implements Function<ColorGrid, Colo
         }
 
         return gridPixelColors;
-    }
-
-    private Color averageColors(Collection<Color> colors) {
-        int redSum = 0;
-        int greenSum = 0;
-        int blueSum = 0;
-
-        for (Color color : colors) {
-            redSum += color.getRed();
-            greenSum += color.getGreen();
-            blueSum += color.getBlue();
-        }
-
-        int redAverage = redSum / colors.size();
-        int greenAverage = greenSum / colors.size();
-        int blueAverage = blueSum / colors.size();
-
-        return new Color(redAverage, greenAverage, blueAverage);
     }
 
 }

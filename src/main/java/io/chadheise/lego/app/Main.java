@@ -21,8 +21,8 @@ import io.chadheise.lego.color.grid.ColorColorGridTransform;
 import io.chadheise.lego.color.grid.ColorGrid;
 import io.chadheise.lego.color.grid.LegoRectangleColorGridTransform;
 import io.chadheise.lego.color.measure.*;
+import io.chadheise.lego.color.merger.*;
 import io.chadheise.lego.color.palette.ColorPalette;
-import io.chadheise.lego.color.palette.LegoColorPalette;
 import io.chadheise.lego.color.transform.ColorPaletteColorTransform;
 import io.chadheise.lego.guice.LegoModule;
 
@@ -39,34 +39,29 @@ public class Main {
                 .build();
 
         Injector injector = Guice.createInjector(new LegoModule(args.getColorsFile()));
+
+        // Initialize color manipulation objects
         ColorPalette palette = injector.getInstance(ColorPalette.class);
-
-        Function<BufferedImage, ColorGrid> rectangle_fxn = new BufferedImageColorGridTransform()
-                .andThen(new LegoRectangleColorGridTransform(args.getWidth()));
-
-        BufferedImage inputImage = ImageIO.read(new File(args.getInputFile()));
-        ColorGrid colorGrid = rectangle_fxn.apply(inputImage);
-
-        // ColorMeasure colorMeasure = new ExplodingEuclideanColorMeasure2(.5, .7, .8, 20);
-        // RecenteredColorMeasure uses the full palette to add detail at the expense of color accuracy
-        // ColorMeasure euclideanColorMeasure = new EuclideanColorMeasure();
-        // ColorMeasure colorMeasure = new LabEuclideanColorMeasure();
-        ColorMeasure colorMeasure = new CIEDE2000LabColorMeasure();
-        // ColorMeasure colorMeasure1 = new RedMeanColorMeasure();
-        // ColorMeasure colorMeasure = new RecenteredColorMeasure(palette, colorGrid, colorMeasure1);
+        ColorMeasure colorMeasure = new RedMeanColorMeasure();
         Function<Color, Color> colorTransform = new ColorPaletteColorTransform(palette, colorMeasure);
 
-        Function<ColorGrid, BrickGrid> fxn = new ColorColorGridTransform(colorTransform)
-                .andThen(new BrickGridTransform())
-                .andThen(new BrickGridSplitter2());
+        // Read input image & convert to ColorGrid interface
+        BufferedImage inputImage = ImageIO.read(new File(args.getInputFile()));
+        ColorGrid colorGrid = new BufferedImageColorGridTransform().apply(inputImage);
 
-        // Apply grid without converting to lego colors
-        // Function<ColorGrid, BrickGrid> fxn2 = new BrickGridTransform()
-        //    .andThen(new BrickGridSplitter1());
-        // BrickGrid brickGrid = fxn2.apply(colorGrid);
+        // Transform color grid based on rectangular lego brick shapes
+        colorGrid = new LegoRectangleColorGridTransform(args.getWidth(), new AverageColorMerger())
+                .apply(colorGrid);
 
-        BrickGrid brickGrid = fxn.apply(colorGrid);
+        // Manipulate colors
+        colorGrid = new ColorColorGridTransform(colorTransform).apply(colorGrid);
 
+        // Convert to bricks by joining adjacent matching colors and subdividing into bricks
+        BrickGrid brickGrid = new BrickGridTransform()
+                .andThen(new BrickGridSplitter2())
+                .apply(colorGrid);
+
+        // Generate output image
         BufferedImage outputImage = new BufferedImageBrickGridTransform().apply(brickGrid);
         ImageIO.write(outputImage, imageFormat, new File(args.getOutputFile()));
 

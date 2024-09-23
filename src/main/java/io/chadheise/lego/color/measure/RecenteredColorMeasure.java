@@ -7,7 +7,8 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/* Measures the distance between a color and a palette by re-centering each palette color to its closest color from the image */
+/* Measures the distance between a color and a palette by re-centering each palette color to its closest color from the image
+* RecenteredColorMeasure uses the full palette to add detail at the expense of color accuracy */
 public class RecenteredColorMeasure implements ColorMeasure {
 
     private final ColorPalette colorPalette;

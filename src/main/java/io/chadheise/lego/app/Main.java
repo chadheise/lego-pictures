@@ -50,9 +50,10 @@ public class Main {
         // ColorMeasure colorMeasure = new ExplodingEuclideanColorMeasure2(.5, .7, .8, 20);
         // RecenteredColorMeasure uses the full palette to add detail at the expense of color accuracy
         // ColorMeasure euclideanColorMeasure = new EuclideanColorMeasure();
-        // ColorMeasure colorMeasure = new RecenteredColorMeasure(palette, colorGrid, euclideanColorMeasure);
         // ColorMeasure colorMeasure = new EuclideanLabColorMeasure();
-        ColorMeasure colorMeasure = new RedMeanColorMeasure();
+        ColorMeasure colorMeasure = new CIEDE2000LabColorMeasure();
+        // ColorMeasure colorMeasure1 = new RedMeanColorMeasure();
+        // ColorMeasure colorMeasure = new RecenteredColorMeasure(palette, colorGrid, colorMeasure1);
         Function<Color, Color> colorTransform = new ColorPaletteColorTransform(palette, colorMeasure);
 
         Function<ColorGrid, BrickGrid> fxn = new ColorColorGridTransform(colorTransform)

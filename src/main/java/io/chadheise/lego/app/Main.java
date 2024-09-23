@@ -51,7 +51,7 @@ public class Main {
         // RecenteredColorMeasure uses the full palette to add detail at the expense of color accuracy
         // ColorMeasure euclideanColorMeasure = new EuclideanColorMeasure();
         // ColorMeasure colorMeasure = new RecenteredColorMeasure(palette, colorGrid, euclideanColorMeasure);
-        // ColorMeasure colorMeasure = new LabColorMeasure();
+        // ColorMeasure colorMeasure = new EuclideanLabColorMeasure();
         ColorMeasure colorMeasure = new RedMeanColorMeasure();
         Function<Color, Color> colorTransform = new ColorPaletteColorTransform(palette, colorMeasure);
 

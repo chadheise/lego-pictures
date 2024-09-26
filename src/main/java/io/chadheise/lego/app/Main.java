@@ -16,10 +16,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import io.chadheise.lego.brick.grid.*;
-import io.chadheise.lego.color.grid.BufferedImageColorGridTransform;
-import io.chadheise.lego.color.grid.ColorColorGridTransform;
-import io.chadheise.lego.color.grid.ColorGrid;
-import io.chadheise.lego.color.grid.LegoRectangleColorGridTransform;
+import io.chadheise.lego.color.grid.*;
 import io.chadheise.lego.color.measure.*;
 import io.chadheise.lego.color.merger.*;
 import io.chadheise.lego.color.palette.ColorPalette;
@@ -49,8 +46,15 @@ public class Main {
         BufferedImage inputImage = ImageIO.read(new File(args.getInputFile()));
         ColorGrid colorGrid = new BufferedImageColorGridTransform().apply(inputImage);
 
+        // Transform the input image to the color palettes colors
+        colorGrid = new ColorColorGridTransform(colorTransform).apply(colorGrid);
+
+        // Output after converting the color palette but before merging into lego bricks
+//        ColorGridPrinter.print(colorGrid, 1, 1, args.getOutputFile(), imageFormat);
+//        System.exit(0);
+
         // Transform color grid based on rectangular lego brick shapes
-        colorGrid = new LegoRectangleColorGridTransform(args.getWidth(), new AverageColorMerger())
+        colorGrid = new LegoRectangleColorGridTransform(args.getWidth(), new MedianColorMerger(colorMeasure))
                 .apply(colorGrid);
 
         // Manipulate colors

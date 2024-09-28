@@ -54,7 +54,7 @@ public class Main {
 //        System.exit(0);
 
         // Transform color grid based on rectangular lego brick shapes
-        colorGrid = new LegoRectangleColorGridTransform(args.getWidth(), new MedianColorMerger(colorMeasure))
+        colorGrid = new LegoRectangleColorGridTransform(args.getWidth(), new SquaredAverageColorMerger())
                 .apply(colorGrid);
 
         // Manipulate colors

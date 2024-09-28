@@ -15,11 +15,14 @@ import com.beust.jcommander.JCommander;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import io.chadheise.lego.brick.Brick;
 import io.chadheise.lego.brick.grid.*;
 import io.chadheise.lego.color.grid.*;
 import io.chadheise.lego.color.measure.*;
 import io.chadheise.lego.color.merger.*;
 import io.chadheise.lego.color.palette.ColorPalette;
+import io.chadheise.lego.color.palette.NamedColorPalette;
+import io.chadheise.lego.color.string.*;
 import io.chadheise.lego.color.transform.ColorPaletteColorTransform;
 import io.chadheise.lego.guice.LegoModule;
 
@@ -69,24 +72,46 @@ public class Main {
         BufferedImage outputImage = new BufferedImageBrickGridTransform().apply(brickGrid);
         ImageIO.write(outputImage, imageFormat, new File(args.getOutputFile()));
 
-        getStats(brickGrid);
+        getStats(brickGrid, palette);
     }
 
-    private static void getStats(ColorGrid canvas) {
-        Map<Color, Integer> map = new HashMap<>();
-        for (int x = 0; x < canvas.getWidth(); x++) {
-            for (int y = 0; y < canvas.getHeight(); y++) {
-                Color color = canvas.getColor(x, y);
-                if (!map.containsKey(color)) {
-                    map.put(color, 0);
+    private static void getStats(final BrickGrid brickGrid, final ColorPalette colorPalette) {
+        int brickCount = 0;
+
+        // colorLabel -> brick width -> number of bricks
+        Map<String, Map<Integer, Integer>> map = new HashMap<>();
+        for (int x = 0; x < brickGrid.getWidth(); x++) {
+            for (int y = 0; y < brickGrid.getHeight(); y++) {
+                brickCount += 1;
+                Brick brick = brickGrid.getBrick(x, y);
+                Color color = brick.getColor();
+
+                String colorName = "";
+                if (colorPalette instanceof NamedColorPalette) {
+                    colorName += ((NamedColorPalette) colorPalette).getName(brick.getColor());
                 }
-                map.put(color, map.get(color) + 1);
+                String hexLabel = new ColorStringHex().apply(color);
+                String rgbLabel = new ColorStringRGB().apply(color);
+                String colorLabel = String.format("%s %s %s", colorName, hexLabel, rgbLabel);
+
+                map.putIfAbsent(colorLabel, new HashMap<>());
+                Map<Integer, Integer> counts = map.get(colorLabel);
+                int width = brick.getWidth();
+                counts.putIfAbsent(width, 0);
+                counts.put(width, counts.get(width) + 1);
+
+                y += width - 1; // -1 since for loop will increment by 1
             }
         }
 
-        for (Entry<Color, Integer> entry : map.entrySet()) {
-            System.out.println(entry.getValue() + ": " + entry.getKey());
+        for (Entry<String, Map<Integer, Integer>> entry : map.entrySet()) {
+            for (Entry<Integer, Integer> widthCounts : entry.getValue().entrySet()) {
+                System.out.printf("%s [%d] %d", entry.getKey(), widthCounts.getKey(), widthCounts.getValue());
+                System.out.println();
+            }
         }
+
+        System.out.println("Total number of bricks: " + brickCount);
     }
 
 }

@@ -9,8 +9,7 @@ import io.chadheise.lego.brick.BrickUnit;
 import io.chadheise.lego.color.grid.ColorGrid;
 
 public class BrickGrid implements ColorGrid {
-    // TODO: Make private
-    public List<List<BrickUnit>> brickUnits; // outside array is rows, each row
+    private final List<List<BrickUnit>> brickUnits; // outside array is rows, each row
                                              // contains an array of columns
 
     public BrickGrid(int width, int height) {

@@ -72,7 +72,8 @@ public class ColorPaletteProvider implements Provider<ColorPalette> {
 
                 line = br.readLine();
             }
-            return bldr.build();
+
+            return headerIndices.containsKey("name") ? namedBldr.build() : bldr.build();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -98,7 +99,7 @@ public class ColorPaletteProvider implements Provider<ColorPalette> {
     }
 
     private static String readHexColor(final Map<String, Integer> headerIndices, final String[] line) {
-        final List<String> keys = Arrays.asList("hexColor", "hex");
+        final List<String> keys = Arrays.asList("HexColor", "hex");
         return readPrioritizedValue(headerIndices, line, keys);
     }
 

@@ -1,8 +1,6 @@
 package io.chadheise.lego.color.measure;
 
-import io.chadheise.lego.color.ColorLab;
-import io.chadheise.lego.color.RGBToXYZ;
-import io.chadheise.lego.color.XYZToLab;
+import io.chadheise.lego.color.space.*;
 
 import java.awt.*;
 

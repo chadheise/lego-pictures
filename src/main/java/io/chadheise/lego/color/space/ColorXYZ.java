@@ -1,4 +1,4 @@
-package io.chadheise.lego.color;
+package io.chadheise.lego.color.space;
 
 /* Represents a color the XYZ color space */
 public class ColorXYZ {

@@ -1,4 +1,4 @@
-package io.chadheise.lego.color;
+package io.chadheise.lego.color.space;
 
 import java.util.function.Function;
 

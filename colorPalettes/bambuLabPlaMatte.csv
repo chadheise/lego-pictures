@@ -1,18 +1,18 @@
-r,g,b
-255,255,255
-211,183,167
-232,219,183
-155,158,160
-174,150,212
-232,175,207
-249,153,99
-247,217,89
-222,67,67
-187,61,67
-125,101,86
-104,114,77
-97,198,128
-163,216,225
-0,120,191
-4,47,86
-0,0,0
+Name,HexColor
+Ivory White,#FFFFFF
+Latte Brown,#D3B7A7
+Desert Tan,#E8DBB7
+Ash Gray,#9B9EA0
+Lilac Purple,#AE96D4
+Sakura Pink,#E8AFCF
+Mandarin Orange,#F99963
+Lemon Yellow,#F7D959
+Scarlet Red,#DE4343
+Dark Red,#BB3D43
+Dark Brown,#7D6556
+Dark Green,#68724D
+Grass Green,#61C680
+Ice Blue,#A3D8E1
+Marine Blue,#0078BF
+Dark Blue,#042F56
+Charcoal,#000000

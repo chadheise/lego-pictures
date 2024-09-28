@@ -7,9 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 import com.google.inject.Key;
@@ -17,21 +15,23 @@ import com.google.inject.Provider;
 
 import io.chadheise.lego.color.palette.ColorPalette;
 import io.chadheise.lego.color.palette.FixedColorPalette;
+import io.chadheise.lego.color.palette.NamedColorPalette;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class ColorPaletteProvider implements Provider<ColorPalette> {
 
     /* File path to a CSV file representing color values
-    * Acceptable columns: name, hexColor, hex, r, g, b, red, green, blue */
+     * Acceptable columns: name, hexColor, hex, r, g, b, red, green, blue */
     private final String filePath;
 
-    public ColorPaletteProvider(String filePath) {
+    public ColorPaletteProvider(final String filePath) {
         this.filePath = filePath;
     }
 
     @Override
     public ColorPalette get() {
         FixedColorPalette.Builder bldr = new FixedColorPalette.Builder();
+        NamedColorPalette.Builder namedBldr = new NamedColorPalette.Builder();
 
         try (InputStream input = new FileInputStream(this.filePath)) {
             BufferedReader br = new BufferedReader(new InputStreamReader(input));
@@ -63,7 +63,13 @@ public class ColorPaletteProvider implements Provider<ColorPalette> {
                     color = new Color(r, g, b);
                 }
 
-                bldr.withColor(color);
+                if (headerIndices.containsKey("name")) {
+                    String name = readValue(headerIndices, values, "name");
+                    namedBldr.withColor(name, color);
+                } else {
+                    bldr.withColor(color);
+                }
+
                 line = br.readLine();
             }
             return bldr.build();
@@ -72,63 +78,45 @@ public class ColorPaletteProvider implements Provider<ColorPalette> {
         }
     }
 
-    private static String readHexColor(Map<String, Integer> headerIndices, String[] line) {
+    private static String readValue(final Map<String, Integer> headerIndices, final String[] line, final String key) {
         Integer index = null;
-        if (headerIndices.containsKey("hexcolor")) {
-            index = headerIndices.get("hexcolor");
-        } else if (headerIndices.containsKey("hex")) {
-            index = headerIndices.get("hex");
+        if (headerIndices.containsKey(key.toLowerCase())) {
+            index = headerIndices.get(key.toLowerCase());
+            return line[index];
         }
-
-        if (index == null) {
-            return null;
-        }
-
-        return line[index];
+        return null;
     }
 
-    private static Integer readRed(Map<String, Integer> headerIndices, String[] line) {
-        Integer index = null;
-        if (headerIndices.containsKey("red")) {
-            index = headerIndices.get("red");
-        } else if (headerIndices.containsKey("r")) {
-            index = headerIndices.get("r");
+    private static String readPrioritizedValue(final Map<String, Integer> headerIndices, final String[] line, List<String> keys) {
+        for(String key : keys) {
+            String value = readValue(headerIndices, line, key);
+            if (value != null) {
+                return value;
+            }
         }
-
-        if (index == null) {
-            return null;
-        }
-
-        return Integer.parseInt(line[index]);
+        return null;
     }
 
-    private static Integer readGreen(Map<String, Integer> headerIndices, String[] line) {
-        Integer index = null;
-        if (headerIndices.containsKey("green")) {
-            index = headerIndices.get("green");
-        } else if (headerIndices.containsKey("g")) {
-            index = headerIndices.get("g");
-        }
-
-        if (index == null) {
-            return null;
-        }
-
-        return Integer.parseInt(line[index]);
+    private static String readHexColor(final Map<String, Integer> headerIndices, final String[] line) {
+        final List<String> keys = Arrays.asList("hexColor", "hex");
+        return readPrioritizedValue(headerIndices, line, keys);
     }
 
-    private static Integer readBlue(Map<String, Integer> headerIndices, String[] line) {
-        Integer index = null;
-        if (headerIndices.containsKey("blue")) {
-            index = headerIndices.get("blue");
-        } else if (headerIndices.containsKey("b")) {
-            index = headerIndices.get("b");
-        }
+    private static Integer readRed(final Map<String, Integer> headerIndices, final String[] line) {
+        final List<String> keys = Arrays.asList("red", "r");
+        final String value = readPrioritizedValue(headerIndices, line, keys);
+        return value != null ? Integer.parseInt(value) : null;
+    }
 
-        if (index == null) {
-            return null;
-        }
+    private static Integer readGreen(final Map<String, Integer> headerIndices, final String[] line) {
+        final List<String> keys = Arrays.asList("green", "g");
+        final String value = readPrioritizedValue(headerIndices, line, keys);
+        return value != null ? Integer.parseInt(value) : null;
+    }
 
-        return Integer.parseInt(line[index]);
+    private static Integer readBlue(final Map<String, Integer> headerIndices, final String[] line) {
+        final List<String> keys = Arrays.asList("blue", "b");
+        final String value = readPrioritizedValue(headerIndices, line, keys);
+        return value != null ? Integer.parseInt(value) : null;
     }
 }

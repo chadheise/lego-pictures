@@ -3,6 +3,7 @@ package io.chadheise.lego.app;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,46 +73,13 @@ public class Main {
         BufferedImage outputImage = new BufferedImageBrickGridTransform().apply(brickGrid);
         ImageIO.write(outputImage, imageFormat, new File(args.getOutputFile()));
 
-        getStats(brickGrid, palette);
-    }
+        // Generate metadata output
+        String fileNameRoot = args.getOutputFile().split("\\.")[0];
+        String outputTextFilePath = fileNameRoot + ".txt";
 
-    private static void getStats(final BrickGrid brickGrid, final ColorPalette colorPalette) {
-        int brickCount = 0;
-
-        // colorLabel -> brick width -> number of bricks
-        Map<String, Map<Integer, Integer>> map = new HashMap<>();
-        for (int x = 0; x < brickGrid.getWidth(); x++) {
-            for (int y = 0; y < brickGrid.getHeight(); y++) {
-                brickCount += 1;
-                Brick brick = brickGrid.getBrick(x, y);
-                Color color = brick.getColor();
-
-                String colorName = "";
-                if (colorPalette instanceof NamedColorPalette) {
-                    colorName += ((NamedColorPalette) colorPalette).getName(brick.getColor());
-                }
-                String hexLabel = new ColorStringHex().apply(color);
-                String rgbLabel = new ColorStringRGB().apply(color);
-                String colorLabel = String.format("%s %s %s", colorName, hexLabel, rgbLabel);
-
-                map.putIfAbsent(colorLabel, new HashMap<>());
-                Map<Integer, Integer> counts = map.get(colorLabel);
-                int width = brick.getWidth();
-                counts.putIfAbsent(width, 0);
-                counts.put(width, counts.get(width) + 1);
-
-                y += width - 1; // -1 since for loop will increment by 1
-            }
-        }
-
-        for (Entry<String, Map<Integer, Integer>> entry : map.entrySet()) {
-            for (Entry<Integer, Integer> widthCounts : entry.getValue().entrySet()) {
-                System.out.printf("%s [%d] %d", entry.getKey(), widthCounts.getKey(), widthCounts.getValue());
-                System.out.println();
-            }
-        }
-
-        System.out.println("Total number of bricks: " + brickCount);
+        MetadataWriter metadataWriter = new MetadataWriter(brickGrid, palette);
+        metadataWriter.writeFile(outputTextFilePath);
+        metadataWriter.writeSystemOut();
     }
 
 }

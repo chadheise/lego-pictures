@@ -45,28 +45,34 @@ public class Main {
         ColorPalette palette = injector.getInstance(ColorPalette.class);
         ColorMeasure colorMeasure = new RedMeanColorMeasure();
         Function<Color, Color> colorTransform = new ColorPaletteColorTransform(palette, colorMeasure);
+        Function<ColorGrid, ColorGrid> colorGridTransform = new ColorColorGridTransform(colorTransform);
 
         // Read input image & convert to ColorGrid interface
         BufferedImage inputImage = ImageIO.read(new File(args.getInputFile()));
         ColorGrid colorGrid = new BufferedImageColorGridTransform().apply(inputImage);
 
         // Transform the input image to the color palettes colors
-        colorGrid = new ColorColorGridTransform(colorTransform).apply(colorGrid);
+        boolean preColorTransformEnabled = false;
+        if (preColorTransformEnabled) {
+            colorGrid = colorGridTransform.apply(colorGrid);
+        }
 
         // Output after converting the color palette but before merging into lego bricks
 //        ColorGridPrinter.print(colorGrid, 1, 1, args.getOutputFile(), imageFormat);
 //        System.exit(0);
 
         // Transform color grid based on rectangular lego brick shapes
-        colorGrid = new LegoRectangleColorGridTransform(args.getWidth(), new SquaredAverageColorMerger())
+        ColorMerger colorMerger = new SquaredAverageColorMerger();
+        colorGrid = new LegoRectangleColorGridTransform(args.getWidth(), colorMerger)
                 .apply(colorGrid);
 
         // Manipulate colors
-        colorGrid = new ColorColorGridTransform(colorTransform).apply(colorGrid);
+        colorGrid = colorGridTransform.apply(colorGrid);
 
         // Convert to bricks by joining adjacent matching colors and subdividing into bricks
+        Function<BrickGrid, BrickGrid> brickSplitter = new BrickGridSplitter2();
         BrickGrid brickGrid = new BrickGridTransform()
-                .andThen(new BrickGridSplitter2())
+                .andThen(brickSplitter)
                 .apply(colorGrid);
 
         // Generate output image
@@ -77,7 +83,14 @@ public class Main {
         String fileNameRoot = args.getOutputFile().split("\\.")[0];
         String outputTextFilePath = fileNameRoot + ".txt";
 
-        MetadataWriter metadataWriter = new MetadataWriter(brickGrid, palette);
+        MetadataWriter metadataWriter = new MetadataWriter(
+                args,
+                preColorTransformEnabled,
+                palette,
+                colorMeasure,
+                colorMerger,
+                brickSplitter,
+                brickGrid);
         metadataWriter.writeFile(outputTextFilePath);
         metadataWriter.writeSystemOut();
     }

@@ -90,8 +90,8 @@ public class MetadataWriter {
 
         // colorLabel -> brick width -> number of bricks
         Map<String, Map<Integer, Integer>> map = new HashMap<>();
-        for (int x = 0; x < brickGrid.getWidth(); x++) {
-            for (int y = 0; y < brickGrid.getHeight(); y++) {
+        for (int y = 0; y < brickGrid.getHeight(); y++) {
+            for (int x = 0; x < brickGrid.getWidth(); x++) {
                 brickCount += 1;
                 Brick brick = brickGrid.getBrick(x, y);
                 Color color = brick.getColor();
@@ -110,7 +110,7 @@ public class MetadataWriter {
                 counts.putIfAbsent(width, 0);
                 counts.put(width, counts.get(width) + 1);
 
-                y += width - 1; // -1 since for loop will increment by 1
+                x += width - 1; // -1 since for loop will increment by 1
             }
         }
 

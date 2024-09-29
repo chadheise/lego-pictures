@@ -45,7 +45,7 @@ public class Main {
         ColorGrid colorGrid = new BufferedImageColorGridTransform().apply(inputImage);
 
         // Transform the input image to the color palettes colors
-        boolean preColorTransformEnabled = false;
+        boolean preColorTransformEnabled = true;
         if (preColorTransformEnabled) {
             colorGrid = colorGridTransform.apply(colorGrid);
         }

@@ -3,11 +3,7 @@ package io.chadheise.lego.app;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Function;
 
 import javax.imageio.ImageIO;
@@ -16,14 +12,11 @@ import com.beust.jcommander.JCommander;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import io.chadheise.lego.brick.Brick;
 import io.chadheise.lego.brick.grid.*;
 import io.chadheise.lego.color.grid.*;
 import io.chadheise.lego.color.measure.*;
 import io.chadheise.lego.color.merger.*;
 import io.chadheise.lego.color.palette.ColorPalette;
-import io.chadheise.lego.color.palette.NamedColorPalette;
-import io.chadheise.lego.color.string.*;
 import io.chadheise.lego.color.transform.ColorPaletteColorTransform;
 import io.chadheise.lego.guice.LegoModule;
 

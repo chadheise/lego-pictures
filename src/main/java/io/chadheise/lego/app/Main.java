@@ -45,8 +45,7 @@ public class Main {
         ColorGrid colorGrid = new BufferedImageColorGridTransform().apply(inputImage);
 
         // Transform the input image to the color palettes colors
-        boolean preColorTransformEnabled = true;
-        if (preColorTransformEnabled) {
+        if (args.getPreColorTransform()) {
             colorGrid = colorGridTransform.apply(colorGrid);
         }
 
@@ -73,19 +72,22 @@ public class Main {
         ImageIO.write(outputImage, imageFormat, new File(args.getOutputFile()));
 
         // Generate metadata output
-        String fileNameRoot = args.getOutputFile().split("\\.")[0];
+        int lastDotIndex = args.getOutputFile().lastIndexOf('.');
+        String fileNameRoot = args.getOutputFile().substring(0, lastDotIndex);
         String outputTextFilePath = fileNameRoot + ".txt";
 
         MetadataWriter metadataWriter = new MetadataWriter(
                 args,
-                preColorTransformEnabled,
+                args.getPreColorTransform(),
                 palette,
                 colorMeasure,
                 colorMerger,
                 brickSplitter,
                 brickGrid);
         metadataWriter.writeFile(outputTextFilePath);
-        metadataWriter.writeSystemOut();
+//        metadataWriter.writeSystemOut();
+        System.out.println("Output image: " + args.getOutputFile());
+        System.out.println("Output metadata: " + outputTextFilePath);
     }
 
 }

@@ -16,6 +16,9 @@ public class Args {
     @Parameter(names = "--width", description = "The width of the output where 1 unit corresponds to a 1x1 lego brick")
     private int width;
 
+    @Parameter(names = "--preColorTransform", description = "Whether or not to transform the colors before generating bricks. Enabling can sometimes give better results but is slower.")
+    private boolean preColorTransform = false;
+
     public String getInputFile() {
         return inputFile;
     }
@@ -30,6 +33,10 @@ public class Args {
 
     public int getWidth() {
         return width;
+    }
+
+    public boolean getPreColorTransform() {
+        return preColorTransform;
     }
 
 }

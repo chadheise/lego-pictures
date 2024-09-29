@@ -57,7 +57,7 @@ for INPUT_FILE_PATH in "$DIR"/*; do
         
         OUTPUT_FILE_PATH="$OUTPUT_DIR/$INPUT_FILENAME_WITHOUT_EXTENSION-$COLORS_FILE_NAME_WITHOUT_EXTENSION-$WIDTH-$TIMESTAMP.png"
         
-        echo 'java -jar target/lego-pictures-jar-with-dependencies.jar --input "$FILE" --output "$DIR/output_$FILE" --colors colorPalettes/bambuLabPla.csv --width "$WIDTH"'
-        java -jar target/lego-pictures-jar-with-dependencies.jar --input "$INPUT_FILE_PATH" --output "$OUTPUT_FILE_PATH" --colors colorPalettes/bambuLabPla.csv --width "$WIDTH"
+        echo 'java -jar target/lego-pictures-jar-with-dependencies.jar --input "$FILE" --output "$DIR/output_$FILE" --colors "$COLORS" --width "$WIDTH"'
+        java -jar target/lego-pictures-jar-with-dependencies.jar --input "$INPUT_FILE_PATH" --output "$OUTPUT_FILE_PATH" --colors "$COLORS" --width "$WIDTH"
     fi
 done

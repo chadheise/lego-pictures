@@ -9,13 +9,15 @@ import io.chadheise.lego.color.palette.NamedColorPalette;
 import io.chadheise.lego.color.string.ColorStringHex;
 import io.chadheise.lego.color.string.ColorStringRGB;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -88,20 +90,26 @@ public class MetadataWriter {
     private void writeBrickCounts(final BufferedWriter writer) throws IOException {
         int brickCount = 0;
 
+        List<List<String>> brickLabels = new ArrayList<>();
+
         // colorLabel -> brick width -> number of bricks
         Map<String, Map<Integer, Integer>> map = new HashMap<>();
         for (int y = 0; y < brickGrid.getHeight(); y++) {
+            List<String> brickLabelsInRow = new ArrayList<>();
             for (int x = 0; x < brickGrid.getWidth(); x++) {
                 brickCount += 1;
                 Brick brick = brickGrid.getBrick(x, y);
                 Color color = brick.getColor();
 
+                String hexLabel = new ColorStringHex().apply(color);
+                String rgbLabel = new ColorStringRGB().apply(color);
+
+                String brickLabel = hexLabel;
                 String colorName = "";
                 if (colorPalette instanceof NamedColorPalette) {
                     colorName += ((NamedColorPalette) colorPalette).getName(brick.getColor());
+                    brickLabel = ((NamedColorPalette) colorPalette).getName(brick.getColor());
                 }
-                String hexLabel = new ColorStringHex().apply(color);
-                String rgbLabel = new ColorStringRGB().apply(color);
                 String colorLabel = String.format("%s %s %s", colorName, hexLabel, rgbLabel);
 
                 map.putIfAbsent(colorLabel, new HashMap<>());
@@ -110,12 +118,16 @@ public class MetadataWriter {
                 counts.putIfAbsent(width, 0);
                 counts.put(width, counts.get(width) + 1);
 
+                brickLabel += String.format(" [%d]", width);
+                brickLabelsInRow.add(brickLabel);
+
                 x += width - 1; // -1 since for loop will increment by 1
             }
+            brickLabels.add(brickLabelsInRow);
         }
 
-        writer.write("Color [Brick Width] Count");
-        writer.newLine();
+        writer.write("Brick Summary:\n");
+        writer.write("Color [Brick Width] Count\n");
         for (Map.Entry<String, Map<Integer, Integer>> entry : map.entrySet()) {
             for (Map.Entry<Integer, Integer> widthCounts : entry.getValue().entrySet()) {
                 writer.write(String.format("%s [%d] %d", entry.getKey(), widthCounts.getKey(), widthCounts.getValue()));
@@ -123,7 +135,30 @@ public class MetadataWriter {
             }
         }
 
-        writer.write("Total number of bricks: " + brickCount);
+        writer.write(String.format("Total number of bricks: %d\n", brickCount));
         writer.newLine();
+
+        writer.write("Brick table: \n");
+        for (List<String> label : brickLabels) {
+            StringBuilder rowLabel = new StringBuilder("|");
+            for (String brickLabel : label) {
+                rowLabel.append(brickLabel);
+                rowLabel.append("|");
+            }
+            writer.write(rowLabel.toString());
+            writer.newLine();
+        }
+        writer.newLine();
+
+        writer.write("Bricks by row: \n");
+        // Iterate in reverse so that the output starts at the bottom row
+        for (int row = brickLabels.size() - 1; row >= 0; row--) {
+            writer.write(String.format("Row %d:\n",brickLabels.size() - row));
+            for (String brickLabel : brickLabels.get(row)) {
+                writer.write(brickLabel);
+                writer.newLine();
+            }
+            writer.newLine();
+        }
     }
 }

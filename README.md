@@ -29,6 +29,10 @@ mvn package
 ```
 
 ## Example
+<img src="example/shrine.jpg" height="150">
+<img src="example/shrine.png" height="150">
+<img src="example/shrineConstructed.jpg" height="150">
+
 ```
 mvn package
 java -jar target/lego-pictures-jar-with-dependencies.jar --input example/shrine.jpg --output example/shrine.png --colors example/shrineColors.csv --width 75 

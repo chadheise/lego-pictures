@@ -29,9 +29,7 @@ mvn package
 ```
 
 ## Example
-<img src="example/shrine.jpg" height="150">
-<img src="example/shrine.png" height="150">
-<img src="example/shrineConstructed.jpg" height="150">
+|<img src="example/shrine.jpg" height="150">|<img src="example/shrine.png" height="150">|<img src="example/shrineConstructed.jpg" height="150">|
 
 ```
 mvn package

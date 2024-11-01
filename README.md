@@ -2,12 +2,22 @@
 
 This application takes a jpeg image and coverts it to an image that could be constructed by stacking lego bricks.
 
+## Example
+```
+mvn package
+java -jar target/lego-pictures-jar-with-dependencies.jar --input example/shrine.jpg --output example/shrine.png --colors example/shrineColors.csv --width 75 
+```
+### Outputs
+* **example/shrine.png** - A visual picture of the lego-brick version
+* **example/shrine.txt** - Metadata including the transform settings and various outputs of the bricks, colors and layouts needed to produce the image
+
 ## Build ##
 ```
 mvn package
 ```
 
 ## Execute ##
+
 ### Single image
 ```
 java -jar target/lego-pictures-jar-with-dependencies.jar --input inputFile.jpg --output outputFile.png --colors colorPalettes/lego.csv --width 75 

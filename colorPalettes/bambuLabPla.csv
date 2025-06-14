@@ -1,39 +1,56 @@
 Name,HexColor
 Ivory White - Matte,#FFFFFF
-Latte Brown - Matte,#D3B7A7
+Bone White - Matte,#CBC6B8
 Desert Tan - Matte,#E8DBB7
-Ash Gray - Matte,#9B9EA0
+Latte Brown - Matte,#D3B7A7
+Caramel - Matte,#AE835B
+Terracotta - Matte,#B15533
+Dark Brown - Matte,#7D6556
+Dark Chocolate - Matte,#4D3324
 Lilac Purple - Matte,#AE96D4
 Sakura Pink - Matte,#E8AFCF
 Mandarin Orange - Matte,#F99963
 Lemon Yellow - Matte,#F7D959
+Plum - Matte,#950051
 Scarlet Red - Matte,#DE4343
 Dark Red - Matte,#BB3D43
-Dark Brown - Matte,#7D6556
 Dark Green - Matte,#68724D
 Grass Green - Matte,#61C680
+Apple Green - Matte,#C2E189
 Ice Blue - Matte,#A3D8E1
+Sky Blue - Matte,#56B7E6
 Marine Blue - Matte,#0078BF
 Dark Blue - Matte,#042F56
+Ash Gray - Matte,#9B9EA0
+Nardo Gray - Matte,#757575
 Charcoal - Matte,#000000
 Jade White - Basic,#FFFFFF
 Beige - Basic,#F7E6DE
-Gold - Basic,#E4BD68
+Light Gray - Basic,#D1D3D5
 Silver - Basic,#A6A9AA
 Gray - Basic,#8E9089
-Bronze - Basic,#847D48
-Brown - Basic,#9D432C
-Red - Basic,#C12E1F
 Magenta - Basic,#EC008C
 Pink - Basic,#F55A74
+Hot Pink - Basic,#F5547C
 Orange - Basic,#FF6A13
+Pumpkin Orange - Basic,#FF9016
+Gold - Basic,#E4BD68
+Sunflower Yellow - Basic,#FEC600
 Yellow - Basic,#F4EE2A
+Bright Green - Basic,#BECF00
 Bambu Green - Basic,#00AE42
 Mistletoe Green - Basic,#3F8E43
+Bronze - Basic,#847D48
+Cocoa Brown - Basic,#6F5034
+Brown - Basic,#9D432C
+Maroon Red - Basic,#9D2235
+Red - Basic,#C12E1F
+Turquoise - Basic,#00B1B7
 Cyan - Basic,#0086D6
 Blue - Basic,#0A2989
+Cobalt Blue - Basic,#0056B8
 Purple - Basic,#5E43B7
+Indigo Purple - Basic,#482960
 Blue Gray - Basic,#5B6579
-Light Gray - Basic,#D1D3D5
 Dark Gray - Basic,#545454
 Black - Basic,#000000
